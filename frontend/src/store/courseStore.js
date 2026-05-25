@@ -2,8 +2,9 @@ import { create } from 'zustand';
 import axios from 'axios';
 import useAuthStore from './authStore';
 
-const API_URL = 'http://localhost:5000/api/v1/courses';
-const INSTRUCTOR_API_URL = 'http://localhost:5000/api/v1/instructor/courses';
+const API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/courses` : 'http://localhost:5000/api/v1/courses';
+const INSTRUCTOR_API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/instructor/courses` : 'http://localhost:5000/api/v1/instructor/courses';
+const ENROLL_API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/enroll` : 'http://localhost:5000/api/v1/enroll';
 
 const useCourseStore = create((set) => ({
   courses: [],
@@ -47,7 +48,7 @@ const useCourseStore = create((set) => ({
     try {
       const token = useAuthStore.getState().token;
       if (!token) return;
-      const res = await axios.get('http://localhost:5000/api/v1/enroll/my-courses', {
+      const res = await axios.get(`${ENROLL_API_URL}/my-courses`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       set({ enrolledCourses: res.data.data });
@@ -60,7 +61,7 @@ const useCourseStore = create((set) => ({
     try {
       const token = useAuthStore.getState().token;
       if (!token) return false;
-      const res = await axios.post(`http://localhost:5000/api/v1/enroll/${courseId}`, {}, {
+      const res = await axios.post(`${ENROLL_API_URL}/${courseId}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       set({ enrolledCourses: res.data.data });

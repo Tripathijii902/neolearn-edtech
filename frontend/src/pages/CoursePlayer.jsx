@@ -135,7 +135,8 @@ const CoursePlayer = () => {
 
     if (courseId && token) {
       try {
-        await axios.post(`http://localhost:5000/api/v1/enroll/${courseId}/quiz`, { score, passed }, {
+        const ENROLL_API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/enroll` : 'http://localhost:5000/api/v1/enroll';
+        await axios.post(`${ENROLL_API_URL}/${courseId}/quiz`, { score, passed }, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } catch (error) {

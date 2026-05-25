@@ -15,7 +15,8 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/v1/admin/stats', {
+        const ADMIN_API_URL = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/admin` : 'http://localhost:5000/api/v1/admin';
+        const res = await axios.get(`${ADMIN_API_URL}/stats`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setStats(res.data.data);
